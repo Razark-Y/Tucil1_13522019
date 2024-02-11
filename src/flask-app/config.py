@@ -52,40 +52,45 @@ def generate_unique_sequences(tokens, sequenceCount, sequenceMaxSize):
 
     return sequences
 
+def generate_scores(sequence_count):
+    scores = set()
+    while len(scores) < sequence_count:
+        scores.add(random.randint(0, 100))
+    return list(scores)
+
 def generate_matrix_and_sequences(tokens, sequenceCount, matrix_width, matrix_height, sequenceMaxSize):
     # Generate the matrix
     matrix = [[random.choice(tokens) for _ in range(matrix_width)] for _ in range(matrix_height)]
 
     # Generate unique sequences
     sequences = generate_unique_sequences(tokens, sequenceCount, sequenceMaxSize)
-
-    return matrix, sequences
-
-
-
-# Example usage:
-# tokens = ['A', 'B', 'C', 'D', '1', '2', '3']
-# sequenceCount = 5
-# matrix_width = 4
-# matrix_height = 4
-# sequenceMaxSize = 3
-
-# matrix, sequences = generate_matrix_and_sequences(tokens, sequenceCount, matrix_width, matrix_height, sequenceMaxSize)
-
-# print("Generated Matrix:")
-# for row in matrix:
-#     print(row)
-
-# print("\nGenerated Sequences:")
-# for sequence in sequences:
-#     print(sequence)
+    scores = generate_scores(sequenceCount)
+    return matrix, sequences, scores
 
 
-buff,mat,seqlist,scorelist = readfile("tes.txt")
-start = time.time()
-resultspath,resultscore,position=find_seq(buff,mat, 0, 0, "vertical",seqlist,scorelist)
-print(resultscore)
-print(resultspath)
-print(position)
-end = time.time()
-print(f"Execution Time: {end - start} seconds")
+
+tokens = ['A', 'B', 'C', 'D', '1', '2', '3']
+sequenceCount = 5
+matrix_width = 4
+matrix_height = 4
+sequenceMaxSize = 3
+
+matrix, sequences,scores = generate_matrix_and_sequences(tokens, sequenceCount, matrix_width, matrix_height, sequenceMaxSize)
+
+print("Generated Matrix:")
+for row in matrix:
+    print(row)
+
+print("\nGenerated Sequences:")
+for sequence in sequences:
+    print(sequence)
+
+print(scores)
+# buff,mat,seqlist,scorelist = readfile("tes.txt")
+# start = time.time()
+# resultspath,resultscore,position=find_seq(buff,mat, 0, 0, "vertical",seqlist,scorelist)
+# print(resultscore)
+# print(resultspath)
+# print(position)
+# end = time.time()
+# print(f"Execution Time: {end - start} seconds")
