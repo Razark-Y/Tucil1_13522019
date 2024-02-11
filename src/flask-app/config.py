@@ -69,23 +69,23 @@ def generate_matrix_and_sequences(tokens, sequenceCount, matrix_width, matrix_he
 
 
 
-tokens = ['A', 'B', 'C', 'D', '1', '2', '3']
-sequenceCount = 5
-matrix_width = 4
-matrix_height = 4
-sequenceMaxSize = 3
+# tokens = ['A', 'B', 'C', 'D', '1', '2', '3']
+# sequenceCount = 5
+# matrix_width = 4
+# matrix_height = 4
+# sequenceMaxSize = 3
 
-matrix, sequences,scores = generate_matrix_and_sequences(tokens, sequenceCount, matrix_width, matrix_height, sequenceMaxSize)
+# matrix, sequences,scores = generate_matrix_and_sequences(tokens, sequenceCount, matrix_width, matrix_height, sequenceMaxSize)
 
-print("Generated Matrix:")
-for row in matrix:
-    print(row)
+# print("Generated Matrix:")
+# for row in matrix:
+#     print(row)
 
-print("\nGenerated Sequences:")
-for sequence in sequences:
-    print(sequence)
+# print("\nGenerated Sequences:")
+# for sequence in sequences:
+#     print(sequence)
 
-print(scores)
+# print(scores)
 # buff,mat,seqlist,scorelist = readfile("tes.txt")
 # start = time.time()
 # resultspath,resultscore,position=find_seq(buff,mat, 0, 0, "vertical",seqlist,scorelist)

@@ -9,52 +9,10 @@ function App() {
   const [matrix, setMatrix] = useState(() => Array.from({ length: 0 }, () => Array("").fill("")));
   const [resultMatrix, setResultMatrix] = useState([]);
   const [bufferSize, setBufferSize] = useState(1);
-  const [initialMatrix, setInitialMatrix] = useState([]);
   const [scores, setScores] = useState(() => Array(1).fill(0));
   const [isResultBoxVisible, setIsResultBoxVisible] = useState(false);
-  const [tokenCount, setTokenCount] = useState(0);
-  const [tokens, setTokens] = useState([]);
   const closeResultBox = () => setIsResultBoxVisible(false);
   const [showManualInput, setShowManualInput] = useState(true);
-  const [maxSequenceSize, setMaxSequenceSize] = useState('');
-  const handleTokenCountChange = (e) => {
-    const count = parseInt(e.target.value, 10) || 0;
-    setTokenCount(count);
-    setTokens(Array(count).fill('')); // Initialize with empty strings
-  };
-  const handleTokenChange = (index, value) => {
-    const newTokens = tokens.map((token, i) => i === index ? value : token);
-    setTokens(newTokens);
-  };
-  const handleSubmit = async () => {
-    setIsResultBoxVisible(true);
-    // Construct the payload
-    const payload = {
-      tokens,
-      bufferSize: parseInt(bufferSize, 10),
-      matrixWidth: parseInt(cols, 10),
-      matrixHeight: parseInt(rows, 10),
-      numSeq: parseInt(numSeq, 10),
-      maxSequenceSize: parseInt(maxSequenceSize, 10)
-    };
-    try {
-      const response = await fetch('http://localhost:5000/random', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!response.ok) throw new Error('Network response was not ok');
-      const result = await response.json();
-      setResultMatrix(result.result_matrix); 
-      setInitialMatrix(result.initial_matrix);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
-
   const handleGenerateMatrix = () => {
     setMatrix(Array.from({ length: rows }, () => Array(cols).fill(0)));
   };
@@ -85,7 +43,6 @@ function App() {
       const result = await response.json();
       console.log(result); // Log the response to show it was successful
       setResultMatrix(result.result_matrix); // Adjust according to how you want to use the result
-      setInitialMatrix(result.initial_matrix);
     } catch (error) {
       console.error('Error during operation:', error);
     }
@@ -113,7 +70,6 @@ function App() {
     for (let i = 0; i < rows; i++) {
       let row = [];
       for (let j = 0; j < cols; j++) {
-        console.log("Runs")
         // Find the index of the current cell in the resultMatrix
         const resultIndex = resultMatrix.findIndex(([rowIndex, colIndex]) => rowIndex === i && colIndex === j);
         const isHighlighted = resultIndex !== -1;
@@ -143,7 +99,7 @@ function App() {
     return grid;
   };
   const renderInputMatrix = () => {
-    return initialMatrix.map((row, rowIndex) => (
+    return matrix.map((row, rowIndex) => (
       <div key={rowIndex} className="flex justify-center">
         {row.map((cell, cellIndex) => (
           <div
@@ -176,8 +132,7 @@ function App() {
       <h1 className='text-[#f77f00] font-bold text-[52px] pt-[40px] font-serif'>Cyberpunk 2077 Hacking Minigame Solver</h1>
       <h2 className='text-[#f77f00] font-semibold text-[22px] font-serif pb-[30px]'>INSTANT BREACH PROTOCOL SOLVER - START CRACKING, SAMURAI</h2>
       <button onClick={toggleRandomInput} className='text-[#f77f00] font-semibold text-[22px] font-serif bg-[#370617] px-[20px] py-[10px] rounded-xl mb-[30px]'>Toggle Random Input</button>
-      {showManualInput ? (
-        <div className="Manual-Input-Page">
+    <div className="Manual-Input-Page">
       <div className="Size flex gap-[30px]">
         <div className='py-[50px] border-[3px] border-[#f77f00] w-[1000px] px-[30px]'>
           <label className='text-[#f77f00] font-semibold text-[22px] font-serif pr-[30px]'>Rows:</label>
@@ -238,46 +193,15 @@ function App() {
         ))}
       </div>
       <button onClick={handleCalculate} className='text-[#f77f00] font-semibold text-[22px] font-serif bg-[#370617] px-[20px] py-[10px] rounded-xl mt-[20px]'>Find Solution</button>
-        </div>
-      ) : (
-      <div className="Random-Input-Page">
-      <div className="Container flex">
-        <div className='my-[30px] w-[50%] '>
-          <label className='text-[#f77f00] font-semibold text-[22px] font-serif pr-[30px]'>Number of Tokens:</label>
-          <input type="number" value={tokenCount} onChange={handleTokenCountChange} className='w-[200px] bg-[#f77f00] h-[40px] border-[3px] border-black text-center my-[20px]'/>
-          {tokens.map((token, index) => (
-            <input key={index} type="text" value={token} onChange={(e) => handleTokenChange(index, e.target.value)} placeholder={`Token ${index + 1}`} className='w-[500px] bg-[#f77f00] h-[40px] border-[3px] border-black text-center block' />
-          ))}
-        </div>
-        <div className='flex flex-col'>
-          <label className='text-[#f77f00] font-semibold text-[22px] font-serif pr-[30px]'>Buffer Size:</label>
-          <input type="number" value={bufferSize} onChange={(e) => setBufferSize(e.target.value)} className='w-[500px] bg-[#f77f00] h-[40px] border-[3px] border-black text-center' />
-          <label className='text-[#f77f00] font-semibold text-[22px] font-serif pr-[30px]'>Matrix Width:</label>
-          <input type="number" value={cols} onChange={(e) => setCols(e.target.value)} className='w-[500px] bg-[#f77f00] h-[40px] border-[3px] border-black text-center' />
-          <label className='text-[#f77f00] font-semibold text-[22px] font-serif pr-[30px]'>Matrix Height:</label>
-          <input type="number" value={rows} onChange={(e) => setRows(e.target.value)} className='w-[500px] bg-[#f77f00] h-[40px] border-[3px] border-black text-center' />
-          <label className='text-[#f77f00] font-semibold text-[22px] font-serif pr-[30px]'>Number of Sequences:</label>
-          <input type="number" value={numSeq} onChange={(e) => setNumSeq(e.target.value)} className='w-[500px] bg-[#f77f00] h-[40px] border-[3px] border-black text-center' />
-          <label className='text-[#f77f00] font-semibold text-[22px] font-serif pr-[30px]'l>Max Sequence Size:</label>
-          <input type="number" value={maxSequenceSize} onChange={(e) => setMaxSequenceSize(e.target.value)} className='w-[500px] bg-[#f77f00] h-[40px] border-[3px] border-black text-center' />
-        </div>
-        </div>
-        <button onClick={handleSubmit} className='text-[#f77f00] font-semibold text-[22px] font-serif bg-[#370617] px-[20px] py-[10px] rounded-xl mt-[20px] mb-[60px]'>Generate</button>
-        </div>
-      )}
+      </div>
+      /Batas
       {isResultBoxVisible && (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={closeResultBox}>
         <div className="bg-black border-4 border-[#f77f00] p-5 w-3/4 max-h-[80%] overflow-auto" onClick={e => e.stopPropagation()}>
           <h3 className="text-[#f77f00] mb-4">Initial Input Matrix:</h3>
           {renderInputMatrix()}
-          {resultMatrix.length > 0 ? (
-            <div>
-              <h3 className="text-[#f77f00] mt-4 mb-4">Result Matrix:</h3>
-              {renderResultGrid()}
-            </div>
-          ) : (
-            <h3 className="text-[#f77f00] mt-4 mb-4">No Solution Found</h3>
-          )}
+          <h3 className="text-[#f77f00] mt-4 mb-4">Result Matrix:</h3>
+          {renderResultGrid()}
           <button className="mt-4 px-4 py-2 bg-[#370617] text-[#f77f00] rounded hover:bg-[#f77f00] hover:text-black transition" onClick={closeResultBox}>Close</button>
         </div>
       </div>

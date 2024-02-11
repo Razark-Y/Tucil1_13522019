@@ -4,7 +4,7 @@ from helper import path_printer
 def find_seq(buffer,matrix, start_x, start_y, movement, sequence, score):
     resultscore = 0
     resultspath = ''  
-    savedposition = [0]
+    savedposition = []
     length = len(matrix[0])
     for x in range(length):
         stack = [(start_x, x, movement, [matrix[start_x][x]], [(start_x, x)])]
