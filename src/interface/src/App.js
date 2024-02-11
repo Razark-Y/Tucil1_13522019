@@ -97,6 +97,32 @@ function App() {
     }
     return grid;
   };
+  const renderInputMatrix = () => {
+    return matrix.map((row, rowIndex) => (
+      <div key={rowIndex} className="flex justify-center">
+        {row.map((cell, cellIndex) => (
+          <div
+            key={`${rowIndex}-${cellIndex}`}
+            className="cell"
+            style={{
+              width: '50px',
+              height: '50px',
+              border: '1px solid #f77f00',
+              display: 'inline-block',
+              backgroundColor: 'transparent',
+              color: '#f77f00',
+              lineHeight: '50px',
+              textAlign: 'center',
+              fontSize: '16px',
+              margin: '2px',
+            }}
+          >
+            {cell}
+          </div>
+        ))}
+      </div>
+    ));
+  };
   return (
     <div className="App bg-black pl-[50px] h-[100%] w-[100%] pr-[30px]">
       <h1 className='text-[#f77f00] font-bold text-[52px] pt-[40px] font-serif'>Cyberpunk 2077 Hacking Minigame Solver</h1>
@@ -162,15 +188,17 @@ function App() {
       </div>
       <button onClick={handleCalculate} className='text-[#f77f00] font-semibold text-[22px] font-serif bg-[#370617] px-[20px] py-[10px] rounded-xl mt-[20px]'>Find Solution</button>
       {isResultBoxVisible && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={closeResultBox}>
-          <div className="bg-black border-4 border-[#f77f00] p-5 w-3/4 max-h-[80%] overflow-auto" onClick={e => e.stopPropagation()}>
-            {renderResultGrid()}
-            <button className="mt-4 px-4 py-2 bg-[#370617] text-[#f77f00] rounded hover:bg-[#f77f00] hover:text-black transition" onClick={closeResultBox}>Close</button>
-          </div>
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center" onClick={closeResultBox}>
+        <div className="bg-black border-4 border-[#f77f00] p-5 w-3/4 max-h-[80%] overflow-auto" onClick={e => e.stopPropagation()}>
+          <h3 className="text-[#f77f00] mb-4">Initial Input Matrix:</h3>
+          {renderInputMatrix()}
+          <h3 className="text-[#f77f00] mt-4 mb-4">Result Matrix:</h3>
+          {renderResultGrid()}
+          <button className="mt-4 px-4 py-2 bg-[#370617] text-[#f77f00] rounded hover:bg-[#f77f00] hover:text-black transition" onClick={closeResultBox}>Close</button>
         </div>
-      )}
+      </div>
+    )}
     </div>
-
   );
 }
 
