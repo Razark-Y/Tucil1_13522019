@@ -6,7 +6,7 @@ from config import generate_matrix_and_sequences
 from helper import pathToWord
 from config import readfile
 import os
-
+import time
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app)  # Enable CORS for development ease
@@ -14,22 +14,29 @@ CORS(app)  # Enable CORS for development ease
 UPLOAD_FOLDER = 'Uploaded'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensure the upload folder exists
-
-@app.route('/multiply', methods=['POST'])
-def multiply_matrix():
+print("tes")
+@app.route('/calculate', methods=['POST'])
+def calculate():
+    print("tes")
     data = request.get_json()
     matrix = data['matrix']
     buffer_size = data.get('bufferSize', 1)  
     sequences = data.get('sequences', [])
     scores = data.get('scores', [])
+    start = time.time()
+    print(sequences)
     resultspath, resultscore, position = find_seq(buffer_size, matrix, 0, 0, "vertical", sequences, scores) 
-    print(f"Buffer Size: {buffer_size}, Sequences: {position}, Scores: {scores}")
+    end = time.time()
+    gap = (end-start) * 1000
     return jsonify({
+        'result_path':resultspath,
+        'result_scores': resultscore,
         'initial_matrix': matrix,
         'result_matrix': position,
         'buffer_size': buffer_size,  
         'sequences': sequences,
-        'scores': scores
+        'scores': scores,
+        'time':gap
     })
 
 @app.route('/random', methods=['POST'])
@@ -43,13 +50,19 @@ def generate_random():
     max_sequence_size = data['maxSequenceSize']
     matrix, sequences, scores = generate_matrix_and_sequences(tokens, num_seq, matrix_width, matrix_height, max_sequence_size)
     sequencescombined = [pathToWord(x) for x in sequences]
+    start = time.time()
     resultspath, resultscore, position = find_seq(buffer_size, matrix, 0, 0, "vertical", sequencescombined, scores) 
+    end = time.time()
+    gap = (end-start)*1000
     return jsonify({
+        'result_path':resultspath,
         'initial_matrix': matrix,
         'result_matrix': position,
         'buffer_size': buffer_size,  
-        'sequences': sequences,
-        'scores': scores
+        'sequences': sequencescombined,
+        'result_scores': resultscore,
+        'scores':scores,
+        'time':gap
     })
 
 @app.route('/upload', methods=['POST'])
@@ -63,11 +76,11 @@ def upload_file():
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
+        print("upload done")
         try:
             buffer_size, matrix, sequences, scores = readfile(filepath)
             width = len(matrix[0])
             height = len(matrix)
-            print("width",width)
             return jsonify({
                 'message': 'File uploaded and processed successfully',
                 'filepath': filepath,

@@ -37,19 +37,12 @@ def generate_unique_sequences(tokens, sequenceCount, sequenceMaxSize):
     sequences = []
 
     while len(sequences) < sequenceCount:
-        # Ensure sequence length is at least 2 and at most sequenceMaxSize
         sequence_length = random.randint(2, sequenceMaxSize)
         sequence = [random.choice(tokens) for _ in range(sequence_length)]
-
-        # Convert sequence to a tuple for hashability in set
         sequence_tuple = tuple(sequence)
-
-        # Use a set for faster "in" checks
         existing_sequences = {tuple(seq) for seq in sequences}
-
         if sequence_tuple not in existing_sequences:
             sequences.append(sequence)
-
     return sequences
 
 def generate_scores(sequence_count):
@@ -59,10 +52,7 @@ def generate_scores(sequence_count):
     return list(scores)
 
 def generate_matrix_and_sequences(tokens, sequenceCount, matrix_width, matrix_height, sequenceMaxSize):
-    # Generate the matrix
     matrix = [[random.choice(tokens) for _ in range(matrix_width)] for _ in range(matrix_height)]
-
-    # Generate unique sequences
     sequences = generate_unique_sequences(tokens, sequenceCount, sequenceMaxSize)
     scores = generate_scores(sequenceCount)
     return matrix, sequences, scores
@@ -86,11 +76,25 @@ def generate_matrix_and_sequences(tokens, sequenceCount, matrix_width, matrix_he
 #     print(sequence)
 
 # print(scores)
+
+def save_results_to_file(total_score, results_path, positions,runtime,filename="result.txt"):
+    formatted_results_path = " ".join([results_path[i:i+2] for i in range(0, len(results_path), 2)])
+    runtime_ms = runtime * 1000
+    with open(filename, "w") as file:
+        file.write(f"{total_score}\n")
+        file.write(f"{formatted_results_path}\n")
+        for position in positions:
+            file.write(f"{position}\n")
+        file.write(f"{runtime_ms:.2f} ms\n")
+
+
 # buff,mat,seqlist,scorelist = readfile("tes.txt")
 # start = time.time()
 # resultspath,resultscore,position=find_seq(buff,mat, 0, 0, "vertical",seqlist,scorelist)
+# end = time.time()
+# timer = end-start
+# save_results_to_file(resultscore,resultspath,position,timer)
 # print(resultscore)
 # print(resultspath)
 # print(position)
-# end = time.time()
 # print(f"Execution Time: {end - start} seconds")
