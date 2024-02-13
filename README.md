@@ -45,6 +45,7 @@ python app.py
 2. After selecting the file, upload it, the status message will then appear.
 3. To find solution, click the `Find Solution` button. Once the solution is ready, the Result Box will appear.
 4. You are allowed to Save the result as long as a result exist (there is an optimal path).
+5. Note: If program takes too long, it is better to refresh to make things smoother
 ### Input Random
 1. Select the buffer size from the options provided.
 2. Input tokes count and its respective unique tokens.
@@ -53,6 +54,7 @@ python app.py
 5. Press the `Find Solution` button to find the optimal path, which will then be displayed in a modal popup window upon completion.
 6. You are allowed to Save the result as long as a result exist (there is an optimal path).
 7. Keep in mind that any input error will affect the result and in worse case it might lead to error or no solution.
+8. Note: If program takes too long, it is better to refresh to make things smoother
 ### Manual Input
 1. Determine the rows and cols of the matrix
 2. Fill in the matrix
@@ -61,5 +63,5 @@ python app.py
 5. Determine max buffer length
 6. Press `Find Solution`button to find the optimal path, which will then be displayed in a modal popup window upon completion.
 7. You are allowed to Save the result as long as a result exist (there is an optimal path).
-
+8. Note: If program takes too long, it is better to refresh to make things smoother
 
