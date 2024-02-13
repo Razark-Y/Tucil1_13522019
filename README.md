@@ -27,7 +27,7 @@ git clone https://github.com/Razark-Y/Tucil1_13522019.git
 To deploy this project on a terminal interface, simply navigate to src, navigate to flask-app and run (Keep in mind that by file input , make sure the file is in the same position as you are currently in)
 
 ```bash
-  python main.py"
+  python main.py
 ```
 
 To deploy this project on a Web interface, navigate to src, navigate to interface, it is better to have a web browser opened, and run
