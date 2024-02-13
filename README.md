@@ -32,6 +32,7 @@ To deploy this project on a terminal interface, simply navigate to src, navigate
 
 To deploy this project on a Web interface, navigate to src, navigate to interface, it is better to have a web browser opened, and run
 ```bash
+npm install
 npm start
 ```
 then , open another terminal, navigate out from interface and continue to flask-app and simply run
